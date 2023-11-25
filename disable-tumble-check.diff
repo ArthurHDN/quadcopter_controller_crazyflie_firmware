@@ -1,0 +1,13 @@
+diff --git a/src/platform/interface/platform_defaults.h b/src/platform/interface/platform_defaults.h
+index af8d5d0f..117b811c 100644
+--- a/src/platform/interface/platform_defaults.h
++++ b/src/platform/interface/platform_defaults.h
+@@ -111,7 +111,7 @@
+ 
+ // Tumble detection enabled by default
+ #ifndef SUPERVISOR_TUMBLE_CHECK_ENABLE
+-    #define SUPERVISOR_TUMBLE_CHECK_ENABLE true
++    #define SUPERVISOR_TUMBLE_CHECK_ENABLE false
+ #endif
+ 
+ 
