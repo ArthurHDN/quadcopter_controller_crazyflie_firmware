@@ -1,0 +1,6 @@
+app_my_controller/build/
+**/*.o
+**/*.cmd
+**/*.a
+*.elf
+results/

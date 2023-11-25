@@ -1,0 +1,291 @@
+../../src/modules/src/controller/controller_brescianini.c.bkp:    struct vec pError = mkvec(setpoint->position.x - state->position.x,
+../../src/modules/src/controller/controller_brescianini.c.bkp:                              setpoint->position.y - state->position.y,
+../../src/modules/src/controller/controller_brescianini.c.bkp:                              setpoint->position.z - state->position.z);
+../../src/modules/src/controller/controller_brescianini.c.bkp:    struct vec vError = mkvec(setpoint->velocity.x - state->velocity.x,
+../../src/modules/src/controller/controller_brescianini.c.bkp:                              setpoint->velocity.y - state->velocity.y,
+../../src/modules/src/controller/controller_brescianini.c.bkp:                              setpoint->velocity.z - state->velocity.z);
+../../src/modules/src/controller/controller_brescianini.c.bkp:    accDes.x += setpoint->acceleration.x;
+../../src/modules/src/controller/controller_brescianini.c.bkp:    accDes.y += setpoint->acceleration.y;
+../../src/modules/src/controller/controller_brescianini.c.bkp:    accDes.z += setpoint->acceleration.z;
+../../src/modules/src/controller/controller_brescianini.c.bkp:    struct quat attFullReqYaw = mkquat(0, 0, sinf(radians(setpoint->attitude.yaw) / 2.0f), cosf(radians(setpoint->attitude.yaw) / 2.0f));
+../../src/modules/src/controller/controller_brescianini.c.bkp:    control_omega[2] = 2.0f / tau_rp * attError.z + radians(setpoint->attitudeRate.yaw); // due to the mixing, this will behave with time constant tau_yaw
+../../src/modules/src/controller/controller_brescianini.c.bkp:  if (setpoint->mode.z == modeDisable) {
+../../src/modules/src/controller/controller_mellinger.c:  struct vec setpointPos = mkvec(setpoint->position.x, setpoint->position.y, setpoint->position.z);
+../../src/modules/src/controller/controller_mellinger.c:  struct vec setpointVel = mkvec(setpoint->velocity.x, setpoint->velocity.y, setpoint->velocity.z);
+../../src/modules/src/controller/controller_mellinger.c:  if (setpoint->mode.x == modeAbs) {
+../../src/modules/src/controller/controller_mellinger.c:    target_thrust.x = self->mass * setpoint->acceleration.x                       + self->kp_xy * r_error.x + self->kd_xy * v_error.x + self->ki_xy * self->i_error_x;
+../../src/modules/src/controller/controller_mellinger.c:    target_thrust.y = self->mass * setpoint->acceleration.y                       + self->kp_xy * r_error.y + self->kd_xy * v_error.y + self->ki_xy * self->i_error_y;
+../../src/modules/src/controller/controller_mellinger.c:    target_thrust.z = self->mass * (setpoint->acceleration.z + GRAVITY_MAGNITUDE) + self->kp_z  * r_error.z + self->kd_z  * v_error.z + self->ki_z  * self->i_error_z;
+../../src/modules/src/controller/controller_mellinger.c:    target_thrust.x = -sinf(radians(setpoint->attitude.pitch));
+../../src/modules/src/controller/controller_mellinger.c:    target_thrust.y = -sinf(radians(setpoint->attitude.roll));
+../../src/modules/src/controller/controller_mellinger.c:    if (setpoint->mode.z == modeAbs) {
+../../src/modules/src/controller/controller_mellinger.c:  if (setpoint->mode.yaw == modeVelocity) {
+../../src/modules/src/controller/controller_mellinger.c:    desiredYaw = state->attitude.yaw + setpoint->attitudeRate.yaw * dt;
+../../src/modules/src/controller/controller_mellinger.c:  } else if (setpoint->mode.yaw == modeAbs) {
+../../src/modules/src/controller/controller_mellinger.c:    desiredYaw = setpoint->attitude.yaw;
+../../src/modules/src/controller/controller_mellinger.c:  } else if (setpoint->mode.quat == modeAbs) {
+../../src/modules/src/controller/controller_mellinger.c:    struct quat setpoint_quat = mkquat(setpoint->attitudeQuaternion.x, setpoint->attitudeQuaternion.y, setpoint->attitudeQuaternion.z, setpoint->attitudeQuaternion.w);
+../../src/modules/src/controller/controller_mellinger.c:  if (setpoint->mode.x != modeAbs) {
+../../src/modules/src/controller/controller_mellinger.c:  ew.x = radians(setpoint->attitudeRate.roll) - stateAttitudeRateRoll;
+../../src/modules/src/controller/controller_mellinger.c:  ew.y = -radians(setpoint->attitudeRate.pitch) - stateAttitudeRatePitch;
+../../src/modules/src/controller/controller_mellinger.c:  ew.z = radians(setpoint->attitudeRate.yaw) - stateAttitudeRateYaw;
+../../src/modules/src/controller/controller_mellinger.c:    err_d_roll = ((radians(setpoint->attitudeRate.roll) - self->prev_setpoint_omega_roll) - (stateAttitudeRateRoll - self->prev_omega_roll)) / dt;
+../../src/modules/src/controller/controller_mellinger.c:    err_d_pitch = (-(radians(setpoint->attitudeRate.pitch) - self->prev_setpoint_omega_pitch) - (stateAttitudeRatePitch - self->prev_omega_pitch)) / dt;
+../../src/modules/src/controller/controller_mellinger.c:  self->prev_setpoint_omega_roll = radians(setpoint->attitudeRate.roll);
+../../src/modules/src/controller/controller_mellinger.c:  self->prev_setpoint_omega_pitch = radians(setpoint->attitudeRate.pitch);
+../../src/modules/src/controller/controller_mellinger.c:  if (setpoint->mode.z == modeDisable) {
+../../src/modules/src/controller/controller_mellinger.c:    control->thrust = setpoint->thrust;
+../../src/modules/src/controller/position_controller_indi.c:    velocityRef.x = setpoint->velocity.x;
+../../src/modules/src/controller/position_controller_indi.c:	velocityRef.y = -setpoint->velocity.y;
+../../src/modules/src/controller/position_controller_indi.c:    velocityRef.z = -setpoint->velocity.z;
+../../src/modules/src/controller/position_controller_indi.c:	if (setpoint->mode.x == modeAbs) {
+../../src/modules/src/controller/position_controller_indi.c:		positionRef.x = setpoint->position.x;
+../../src/modules/src/controller/position_controller_indi.c:	if (setpoint->mode.y == modeAbs) {
+../../src/modules/src/controller/position_controller_indi.c:		positionRef.y = -setpoint->position.y;
+../../src/modules/src/controller/position_controller_indi.c:	if (setpoint->mode.z == modeAbs) {
+../../src/modules/src/controller/position_controller_indi.c:		positionRef.z = -setpoint->position.z;
+../../src/modules/src/controller/controller_mycontroller.c:    struct vec pError = mkvec(setpoint->position.x - state->position.x,
+../../src/modules/src/controller/controller_mycontroller.c:                              setpoint->position.y - state->position.y,
+../../src/modules/src/controller/controller_mycontroller.c:                              setpoint->position.z - state->position.z);
+../../src/modules/src/controller/controller_mycontroller.c:    struct vec vError = mkvec(setpoint->velocity.x - state->velocity.x,
+../../src/modules/src/controller/controller_mycontroller.c:                              setpoint->velocity.y - state->velocity.y,
+../../src/modules/src/controller/controller_mycontroller.c:                              setpoint->velocity.z - state->velocity.z);
+../../src/modules/src/controller/controller_mycontroller.c:    accDes.x += setpoint->acceleration.x;
+../../src/modules/src/controller/controller_mycontroller.c:    accDes.y += setpoint->acceleration.y;
+../../src/modules/src/controller/controller_mycontroller.c:    accDes.z += setpoint->acceleration.z;
+../../src/modules/src/controller/controller_mycontroller.c:    struct quat attFullReqYaw = mkquat(0, 0, sinf(radians(setpoint->attitude.yaw) / 2.0f), cosf(radians(setpoint->attitude.yaw) / 2.0f));
+../../src/modules/src/controller/controller_mycontroller.c:    control_omega[2] = 2.0f / tau_rp * attError.z + radians(setpoint->attitudeRate.yaw); // due to the mixing, this will behave with time constant tau_yaw
+../../src/modules/src/controller/controller_mycontroller.c:  if (setpoint->mode.z == modeDisable) {
+../../src/modules/src/controller/controller_indi.c:		if (setpoint->mode.yaw == modeVelocity) {
+../../src/modules/src/controller/controller_indi.c:			attitudeDesired.yaw += setpoint->attitudeRate.yaw * ATTITUDE_UPDATE_DT; //if line 140 (or the other setpoints) in crtp_commander_generic.c has the - sign remove add a -sign here to convert the crazyfly coords (ENU) to INDI  body coords (NED)
+../../src/modules/src/controller/controller_indi.c:			attitudeDesired.yaw = setpoint->attitude.yaw;
+../../src/modules/src/controller/controller_indi.c:		if (setpoint->mode.z == modeDisable) {
+../../src/modules/src/controller/controller_indi.c:				actuatorThrust = setpoint->thrust;
+../../src/modules/src/controller/controller_indi.c:		if (setpoint->mode.x == modeDisable) {
+../../src/modules/src/controller/controller_indi.c:				attitudeDesired.roll = radians(setpoint->attitude.roll); //no sign conversion as CF coords is equal to NED for roll
+../../src/modules/src/controller/controller_indi.c:		if (setpoint->mode.y == modeDisable) {
+../../src/modules/src/controller/controller_indi.c:				attitudeDesired.pitch = radians(setpoint->attitude.pitch); //no sign conversion as CF coords use left hand for positive pitch.
+../../src/modules/src/controller/controller_indi.c:		if (setpoint->mode.roll == modeVelocity) {
+../../src/modules/src/controller/controller_indi.c:			rateDesired.roll = radians(setpoint->attitudeRate.roll);
+../../src/modules/src/controller/controller_indi.c:		if (setpoint->mode.pitch == modeVelocity) {
+../../src/modules/src/controller/controller_indi.c:			rateDesired.pitch = radians(setpoint->attitudeRate.pitch);
+../../src/modules/src/controller/controller_pid.c:    if (setpoint->mode.yaw == modeVelocity) {
+../../src/modules/src/controller/controller_pid.c:      attitudeDesired.yaw = capAngle(attitudeDesired.yaw + setpoint->attitudeRate.yaw * ATTITUDE_UPDATE_DT);
+../../src/modules/src/controller/controller_pid.c:    } else if (setpoint->mode.yaw == modeAbs) {
+../../src/modules/src/controller/controller_pid.c:      attitudeDesired.yaw = setpoint->attitude.yaw;
+../../src/modules/src/controller/controller_pid.c:    } else if (setpoint->mode.quat == modeAbs) {
+../../src/modules/src/controller/controller_pid.c:      struct quat setpoint_quat = mkquat(setpoint->attitudeQuaternion.x, setpoint->attitudeQuaternion.y, setpoint->attitudeQuaternion.z, setpoint->attitudeQuaternion.w);
+../../src/modules/src/controller/controller_pid.c:    if (setpoint->mode.z == modeDisable) {
+../../src/modules/src/controller/controller_pid.c:      actuatorThrust = setpoint->thrust;
+../../src/modules/src/controller/controller_pid.c:    if (setpoint->mode.x == modeDisable || setpoint->mode.y == modeDisable) {
+../../src/modules/src/controller/controller_pid.c:      attitudeDesired.roll = setpoint->attitude.roll;
+../../src/modules/src/controller/controller_pid.c:      attitudeDesired.pitch = setpoint->attitude.pitch;
+../../src/modules/src/controller/controller_pid.c:    if (setpoint->mode.roll == modeVelocity) {
+../../src/modules/src/controller/controller_pid.c:      rateDesired.roll = setpoint->attitudeRate.roll;
+../../src/modules/src/controller/controller_pid.c:    if (setpoint->mode.pitch == modeVelocity) {
+../../src/modules/src/controller/controller_pid.c:      rateDesired.pitch = setpoint->attitudeRate.pitch;
+../../src/modules/src/controller/position_controller_pid.c:  float setp_body_x = setpoint->position.x * cosyaw + setpoint->position.y * sinyaw;
+../../src/modules/src/controller/position_controller_pid.c:  float setp_body_y = -setpoint->position.x * sinyaw + setpoint->position.y * cosyaw;
+../../src/modules/src/controller/position_controller_pid.c:  float globalvx = setpoint->velocity.x;
+../../src/modules/src/controller/position_controller_pid.c:  float globalvy = setpoint->velocity.y;
+../../src/modules/src/controller/position_controller_pid.c:  setpoint_velocity.x = setpoint->velocity.x;
+../../src/modules/src/controller/position_controller_pid.c:  setpoint_velocity.y = setpoint->velocity.y;
+../../src/modules/src/controller/position_controller_pid.c:  setpoint_velocity.z = setpoint->velocity.z;
+../../src/modules/src/controller/position_controller_pid.c:  if (setpoint->mode.x == modeAbs) {
+../../src/modules/src/controller/position_controller_pid.c:  } else if (!setpoint->velocity_body) {
+../../src/modules/src/controller/position_controller_pid.c:  if (setpoint->mode.y == modeAbs) {
+../../src/modules/src/controller/position_controller_pid.c:  } else if (!setpoint->velocity_body) {
+../../src/modules/src/controller/position_controller_pid.c:  if (setpoint->mode.z == modeAbs) {
+../../src/modules/src/controller/position_controller_pid.c:    setpoint_velocity.z = runPid(state->position.z, &this.pidZ, setpoint->position.z, DT);
+../../src/modules/src/controller/controller_brescianini.c:    struct vec pError = mkvec(setpoint->position.x - state->position.x,
+../../src/modules/src/controller/controller_brescianini.c:                              setpoint->position.y - state->position.y,
+../../src/modules/src/controller/controller_brescianini.c:                              setpoint->position.z - state->position.z);
+../../src/modules/src/controller/controller_brescianini.c:    struct vec vError = mkvec(setpoint->velocity.x - state->velocity.x,
+../../src/modules/src/controller/controller_brescianini.c:                              setpoint->velocity.y - state->velocity.y,
+../../src/modules/src/controller/controller_brescianini.c:                              setpoint->velocity.z - state->velocity.z);
+../../src/modules/src/controller/controller_brescianini.c:    accDes.x += setpoint->acceleration.x;
+../../src/modules/src/controller/controller_brescianini.c:    accDes.y += setpoint->acceleration.y;
+../../src/modules/src/controller/controller_brescianini.c:    accDes.z += setpoint->acceleration.z;
+../../src/modules/src/controller/controller_brescianini.c:    struct quat attFullReqYaw = mkquat(0, 0, sinf(radians(setpoint->attitude.yaw) / 2.0f), cosf(radians(setpoint->attitude.yaw) / 2.0f));
+../../src/modules/src/controller/controller_brescianini.c:    control_omega[2] = 2.0f / tau_rp * attError.z + radians(setpoint->attitudeRate.yaw); // due to the mixing, this will behave with time constant tau_yaw
+../../src/modules/src/controller/controller_brescianini.c:  if (setpoint->mode.z == modeDisable) {
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->position.x = ev.pos.x;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->position.y = ev.pos.y;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->position.z = ev.pos.z;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->velocity.x = ev.vel.x;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->velocity.y = ev.vel.y;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->velocity.z = ev.vel.z;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->attitude.yaw = degrees(ev.yaw);
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->attitudeRate.roll = degrees(ev.omega.x);
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->attitudeRate.pitch = degrees(ev.omega.y);
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->attitudeRate.yaw = degrees(ev.omega.z);
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->mode.x = modeAbs;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->mode.y = modeAbs;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->mode.z = modeAbs;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->mode.roll = modeDisable;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->mode.pitch = modeDisable;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->mode.yaw = modeAbs;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->mode.quat = modeDisable;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->acceleration.x = ev.acc.x;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->acceleration.y = ev.acc.y;
+../../src/modules/src/crtp_commander_high_level.c:    setpoint->acceleration.z = ev.acc.z;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.x = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.y = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.z = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity.x = values->vx;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity.y = values->vy;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity.z = values->vz;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.yaw = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.yaw = -values->yawrate;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.z = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->position.z = values->zDistance;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.yaw = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.yaw = -values->yawrate;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.roll = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.pitch = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitude.roll = values->roll;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitude.pitch = values->pitch;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.x = modeDisable;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.y = modeDisable;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.z = modeDisable;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.yaw = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.roll = isSelfLevelEnabled ? modeAbs : modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.pitch = isSelfLevelEnabled ? modeAbs : modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:    setpoint->attitude.roll = -1 * getChannelUnitMultiplier(values->channelRoll, 1500, 500) * s_CppmEmuRollMaxAngleDeg; // roll inverted
+../../src/modules/src/crtp_commander_generic.c:    setpoint->attitude.pitch = -1 * getChannelUnitMultiplier(values->channelPitch, 1500, 500) * s_CppmEmuPitchMaxAngleDeg; // pitch inverted
+../../src/modules/src/crtp_commander_generic.c:    setpoint->attitudeRate.roll = -1 * getChannelUnitMultiplier(values->channelRoll, 1500, 500) * s_CppmEmuRollMaxRateDps; // roll inverted
+../../src/modules/src/crtp_commander_generic.c:    setpoint->attitudeRate.pitch = -1 * getChannelUnitMultiplier(values->channelPitch, 1500, 500) * s_CppmEmuPitchMaxRateDps; // pitch inverted
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.yaw = -1 * getChannelUnitMultiplier(values->channelYaw, 1500, 500) * s_CppmEmuYawMaxRateDps; // yaw inverted
+../../src/modules/src/crtp_commander_generic.c:  setpoint->thrust = getChannelUnitMultiplier(values->channelThrust, 1000, 1000) * (float)UINT16_MAX; // Thrust is positive only - uses the full 1000-2000 range
+../../src/modules/src/crtp_commander_generic.c:  if(setpoint->thrust < 0)
+../../src/modules/src/crtp_commander_generic.c:    setpoint->thrust = 0;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.z = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity.z = values->zVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.yaw = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.yaw = -values->yawrate;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.roll = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.pitch = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitude.roll = values->roll;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitude.pitch = values->pitch;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.z = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->position.z = values->zDistance;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.yaw = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.yaw = -values->yawrate;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.x = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.y = modeVelocity;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity.x = values->vx;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity.y = values->vy;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity_body = true;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.x = modeAbs; \
+../../src/modules/src/crtp_commander_generic.c:  setpoint->position.x = values->x / 1000.0f; \
+../../src/modules/src/crtp_commander_generic.c:  setpoint->velocity.x = (values->v ## x) / 1000.0f; \
+../../src/modules/src/crtp_commander_generic.c:  setpoint->acceleration.x = (values->a ## x) / 1000.0f; \
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.roll = millirad2deg * values->rateRoll;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.pitch = millirad2deg * values->ratePitch;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitudeRate.yaw = millirad2deg * values->rateYaw;
+../../src/modules/src/crtp_commander_generic.c:  quatdecompress(values->quat, (float *)&setpoint->attitudeQuaternion.q0);
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.quat = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.roll = modeDisable;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.pitch = modeDisable;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.yaw = modeDisable;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.x = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.y = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.z = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->position.x = values->x;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->position.y = values->y;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->position.z = values->z;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->mode.yaw = modeAbs;
+../../src/modules/src/crtp_commander_generic.c:  setpoint->attitude.yaw = values->yaw;
+../../src/modules/src/crtp_commander_rpyt.c:  float originalRoll = setpoint->attitude.roll;
+../../src/modules/src/crtp_commander_rpyt.c:  float originalPitch = setpoint->attitude.pitch;
+../../src/modules/src/crtp_commander_rpyt.c:  setpoint->attitude.roll = originalRoll * cosy - originalPitch * siny;
+../../src/modules/src/crtp_commander_rpyt.c:  setpoint->attitude.pitch = originalPitch * cosy + originalRoll * siny;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->thrust = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->thrust = fminf(rawThrust, MAX_THRUST);
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->thrust = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.z = modeVelocity;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->velocity.z = ((float) rawThrust - 32767.f) / 32767.f;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.z = modeDisable;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.x = modeVelocity;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.y = modeVelocity;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.roll = modeDisable;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.pitch = modeDisable;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->velocity.x = values->pitch/30.0f;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->velocity.y = values->roll/30.0f;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->attitude.roll  = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->attitude.pitch = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.x = modeAbs;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.y = modeAbs;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.z = modeAbs;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.roll = modeDisable;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.pitch = modeDisable;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.yaw = modeAbs;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->position.x = -values->pitch;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->position.y = values->roll;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->position.z = values->thrust/1000.0f;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->attitude.roll  = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->attitude.pitch = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->attitude.yaw = values->yaw;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->thrust = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.x = modeDisable;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->mode.y = modeDisable;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->mode.roll = modeVelocity;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitudeRate.roll = values->roll;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitude.roll = 0;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->mode.roll = modeAbs;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitudeRate.roll = 0;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitude.roll = values->roll;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->mode.pitch = modeVelocity;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitudeRate.pitch = values->pitch;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitude.pitch = 0;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->mode.pitch = modeAbs;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitudeRate.pitch = 0;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitude.pitch = values->pitch;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->velocity.x = 0;
+../../src/modules/src/crtp_commander_rpyt.c:    setpoint->velocity.y = 0;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitudeRate.yaw = -values->yaw;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->mode.yaw = modeVelocity;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->mode.yaw = modeAbs;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitudeRate.yaw = 0;
+../../src/modules/src/crtp_commander_rpyt.c:      setpoint->attitude.yaw = values->yaw;
+../../src/modules/src/supervisor.c:  const uint32_t setpointAge = currentTick - setpoint->timestamp;
+../../src/modules/src/supervisor.c:      setpoint->mode.x = modeDisable;
+../../src/modules/src/supervisor.c:      setpoint->mode.y = modeDisable;
+../../src/modules/src/supervisor.c:      setpoint->mode.roll = modeAbs;
+../../src/modules/src/supervisor.c:      setpoint->mode.pitch = modeAbs;
+../../src/modules/src/supervisor.c:      setpoint->mode.yaw = modeVelocity;
+../../src/modules/src/supervisor.c:      setpoint->attitude.roll = 0;
+../../src/modules/src/supervisor.c:      setpoint->attitude.pitch = 0;
+../../src/modules/src/supervisor.c:      setpoint->attitudeRate.yaw = 0;
+../../src/modules/src/collision_avoidance.c:  struct vec setPos = vec2svec(setpoint->position);
+../../src/modules/src/collision_avoidance.c:  struct vec setVel = vec2svec(setpoint->velocity);
+../../src/modules/src/collision_avoidance.c:  if (setpoint->mode.x == modeVelocity) {
+../../src/modules/src/collision_avoidance.c:  else if (setpoint->mode.x == modeAbs) {
+../../src/modules/src/collision_avoidance.c:  setpoint->position = svec2vec(setPos);
+../../src/modules/src/collision_avoidance.c:  setpoint->velocity = svec2vec(setVel);
+../../src/modules/src/commander.c:    setpoint->timestamp = xTaskGetTickCount();
+../../src/modules/src/commander.c:  lastUpdate = setpoint->timestamp;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->mode.z = modeAbs;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->position.z = z;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->mode.yaw = modeVelocity;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->attitudeRate.yaw = yawrate;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->mode.x = modeVelocity;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->mode.y = modeVelocity;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->velocity.x = vx;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->velocity.y = vy;
+../../examples/demos/app_push_demo/src/push.c:  setpoint->velocity_body = true;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->mode.z = modeAbs;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->position.z = z;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->mode.yaw = modeVelocity;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->attitudeRate.yaw = yawrate;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->mode.x = modeVelocity;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->mode.y = modeVelocity;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->velocity.x = vx;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->velocity.y = vy;
+../../examples/demos/app_wall_following_demo/src/wall_following.c:  setpoint->velocity_body = true;
+../../examples/app_my_controller/src/controller_outoftree.c:    setpoint->velocity.x,
+../../examples/app_my_controller/src/controller_outoftree.c:    setpoint->velocity.y,
+../../examples/app_my_controller/src/controller_outoftree.c:    setpoint->velocity.z,
+../../examples/app_my_controller/src/controller_outoftree.c:    setpoint->attitudeRate.yaw
+../../examples/app_my_controller/src/controller_outoftree.c:  if (setpoint->mode.z == modeDisable) {
+../../docs/functional-areas/sensor-to-control/commanders_setpoints.md: * [Setpoint Structure](#setpoint-structure)
