@@ -4,3 +4,6 @@ app_my_controller/build/
 **/*.a
 *.elf
 results/
+cache/
+*__pycache__/
+*.pyc
