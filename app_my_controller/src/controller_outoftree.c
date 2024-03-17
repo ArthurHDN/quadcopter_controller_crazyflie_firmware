@@ -75,15 +75,19 @@ static struct mat33 CRAZYFLIE_INERTIA_INV =
 // static float heuristic_rp = 12;
 // static float heuristic_yaw = 5;
 
-static struct mat33 K_varphi =
-    {{{10.0f, 0.0f, 0.0f},
-      {0.0f, 10.0f, 0.0f},
-      {0.0f, 0.0f, 10.0f}}};
+// static struct mat33 K_varphi =
+//     {{{10.0f, 0.0f, 0.0f},
+//       {0.0f, 10.0f, 0.0f},
+//       {0.0f, 0.0f, 10.0f}}};
 
+// static struct mat33 K_o =
+//     {{{3.7776f, -0.0162f, -0.0653f},
+//       {-0.0201f, 5.7169f, -0.0021f},
+//       {-0.0814f, -0.0021f, 5.7087f}}};
 static struct mat33 K_o =
-    {{{3.7776f, -0.0162f, -0.0653f},
-      {-0.0201f, 5.7169f, -0.0021f},
-      {-0.0814f, -0.0021f, 5.7087f}}};
+    {{{5.0f, 0.0f, 0.0f},
+      {0.0f, 5.0f, 0.0f},
+      {0.0f, 0.0f, 5.0f}}};
 
 static struct mat33 K_w =
     {{{10.3813f, -0.0024f, -0.0098f},
@@ -112,6 +116,7 @@ static float epsilon_o = 2.0e-3f;
 static float rho_3 = 2.5e-5f;
 static float rho_4 = 2.5e-5f;
 
+static float xi_r = 0.0005f;
 static float saturate_xi3_hat = 0.0f;
 static float saturate_xi4_hat = 0.0f;
 static float robust_controller = 1.0f;
@@ -149,6 +154,22 @@ static inline struct vec angular_velocity(struct quat q1, struct quat q2, float 
   return w;
 }
 
+static inline struct quat qqmul2(struct quat q1, struct quat q2) {
+  struct vec q1_vec = quatimagpart(q1);
+  struct vec q2_vec = quatimagpart(q2);
+  float w = q1.w*q2.w - vdot(q1_vec,q2_vec);
+  struct vec v = vadd3(
+    vscl(q1.w, q2_vec),
+    vscl(q2.w, q1_vec),
+    vcross(q1_vec, q2_vec)
+  );
+  return quatvw(v,w);
+}
+
+static inline struct vec qvrot2(struct vec v, struct quat q) {
+  struct quat v_quat = qqmul2(qinv(q), qqmul2(quatvw(v,0.0f), q));
+  return quatimagpart(v_quat);
+}
 
 // RATE_1000_HZ
 // RATE_500_HZ
@@ -222,12 +243,10 @@ void controllerMyController(controllerMyController_t* self, control_t *control, 
   ////////////////////
   // NOMINAL CONTROL
   ///////////////////
-  //o_tilde = o*qinv(target_attitude)
-  struct quat attitude_error = qqmul(self->nominal_attitude, qinv(target_attitude));
-  //z_o = 2*lnquat(o_tilde)
-  struct vec z_o = doublelnquat(attitude_error); // z_o.z = 0.0f;
-  // varphi = w_d - K_varphi*z_o
-  struct vec varphi = vadd(w_d, vneg( mvmul(K_varphi, z_o) ));
+  struct quat attitude_error = qqmul2(qinv(target_attitude),self->nominal_attitude);
+  struct vec z_o = quatimagpart(attitude_error); // z_o.z = 0.0f;
+  // varphi = w_d_B
+  struct vec varphi = qvrot2(w_d, attitude_error);
   // dvarphidt
   struct vec dvarphidt = vzero();
   if (self->prev_varphi.x == self->prev_varphi.x){
@@ -254,11 +273,11 @@ void controllerMyController(controllerMyController_t* self, control_t *control, 
   // ROBUST CONTROL
   ///////////////////
   // // oe = o¯o∗
-  struct quat o_e = qqmul(attitude, qinv(self->nominal_attitude));
-  // // ωe = ω− ¯ω
-  struct vec w_e = vsub(w, self->nominal_angular_velocity);
-  // // eo = 2 ln(oe)
-  struct vec e_o = doublelnquat(o_e); // e_o.z = 0.0f;
+  struct quat o_e = qqmul2(qinv(self->nominal_attitude), attitude);
+  // // ωe = ω− ¯ω_B
+  struct vec w_e = vsub(w, qvrot2(self->nominal_angular_velocity,o_e));
+  // // eo = I{oe}
+  struct vec e_o = quatimagpart(o_e); // e_o.z = 0.0f;
   // // φe = −kφeeo
   struct vec varphi_e = vneg(vscl(k_varphi_e, e_o));
   // // eω = ωe −φe
@@ -324,7 +343,8 @@ void controllerMyController(controllerMyController_t* self, control_t *control, 
   ////////////////////
   // PRACTICAL CONTROL
   ///////////////////
-  struct vec tau = vadd(bar_tau, tau_e);
+  struct vec bar_tau_B = mvmul(CRAZYFLIE_INERTIA,qvrot2(mvmul(CRAZYFLIE_INERTIA_INV,bar_tau), o_e));
+  struct vec tau = vadd(bar_tau_B, tau_e);
   if (robust_controller == 0.0f) {
     tau = bar_tau;
   } else if (robust_controller == 2.0f) {
@@ -363,23 +383,37 @@ void controllerMyController(controllerMyController_t* self, control_t *control, 
   ////////////////////
   // INTEGRATE
   ///////////////////
-  self->xi3_hat = self->xi3_hat + dt*0.5f*rho_3*vmag(e_w);
-  if (self->xi3_hat > saturate_xi3_hat){
-    self->xi3_hat = saturate_xi3_hat;
-  }
-  self->xi4_hat = self->xi4_hat + dt*0.5f*rho_4*vmag2(e_w);
-  if (self->xi4_hat > saturate_xi4_hat){
-    self->xi4_hat = saturate_xi4_hat;
+  // self->xi3_hat = self->xi3_hat + dt*0.5f*rho_3*vmag(e_w);
+  // if (self->xi3_hat > saturate_xi3_hat){
+  //   self->xi3_hat = saturate_xi3_hat;
+  // }
+  // self->xi4_hat = self->xi4_hat + dt*0.5f*rho_4*vmag2(e_w);
+  // if (self->xi4_hat > saturate_xi4_hat){
+  //   self->xi4_hat = saturate_xi4_hat;
+  // }
+
+  float kappa = self->xi3_hat*self->xi3_hat + self->xi4_hat*self->xi4_hat - xi_r*xi_r;
+
+  if (kappa < 0 || 2*self->xi3_hat*rho_3*vmag(e_w) + 2*self->xi4_hat*rho_4*vmag2(e_w) <= 0) {
+      self->xi3_hat = self->xi3_hat + dt*0.5f*rho_3*vmag(e_w);
+      self->xi4_hat = self->xi4_hat + dt*0.5f*rho_4*vmag2(e_w);
+  } else {
+      self->xi3_hat = self->xi3_hat + dt*0.5f*(
+          rho_3*vmag(e_w) - rho_3*(self->xi3_hat*self->xi3_hat*rho_3*vmag(e_w) + self->xi3_hat*self->xi4_hat*rho_4*vmag2(e_w))/(rho_3*self->xi3_hat*self->xi3_hat+rho_4*self->xi4_hat*self->xi4_hat)
+      );
+      self->xi4_hat = self->xi4_hat + dt*0.5f*(
+          rho_4*vmag2(e_w) - rho_4*(self->xi3_hat*self->xi4_hat*rho_3*vmag(e_w) + self->xi4_hat*self->xi4_hat*rho_4*vmag2(e_w))/(rho_3*self->xi3_hat*self->xi3_hat+rho_4*self->xi4_hat*self->xi4_hat)
+      );
   }
 
-  struct quat dnominal_atitudedt = qqmul(
+  struct quat dnominal_atitudedt = qqmul2(
+    self->nominal_attitude,
     mkquat(
       self->nominal_angular_velocity.x,
       self->nominal_angular_velocity.y,
       self->nominal_angular_velocity.z,
       0.0f
-    ),
-    self->nominal_attitude
+    )
   );
   self->nominal_attitude = mkquat(
     self->nominal_attitude.x + dt*0.5f*dnominal_atitudedt.x,
