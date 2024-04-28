@@ -383,15 +383,6 @@ void controllerMyController(controllerMyController_t* self, control_t *control, 
   ////////////////////
   // INTEGRATE
   ///////////////////
-  // self->xi3_hat = self->xi3_hat + dt*0.5f*rho_3*vmag(e_w);
-  // if (self->xi3_hat > saturate_xi3_hat){
-  //   self->xi3_hat = saturate_xi3_hat;
-  // }
-  // self->xi4_hat = self->xi4_hat + dt*0.5f*rho_4*vmag2(e_w);
-  // if (self->xi4_hat > saturate_xi4_hat){
-  //   self->xi4_hat = saturate_xi4_hat;
-  // }
-
   float kappa = self->xi3_hat*self->xi3_hat + self->xi4_hat*self->xi4_hat - xi_r*xi_r;
 
   if (kappa < 0 || 2*self->xi3_hat*rho_3*vmag(e_w) + 2*self->xi4_hat*rho_4*vmag2(e_w) <= 0) {
@@ -404,6 +395,15 @@ void controllerMyController(controllerMyController_t* self, control_t *control, 
       self->xi4_hat = self->xi4_hat + dt*0.5f*(
           rho_4*vmag2(e_w) - rho_4*(self->xi3_hat*self->xi4_hat*rho_3*vmag(e_w) + self->xi4_hat*self->xi4_hat*rho_4*vmag2(e_w))/(rho_3*self->xi3_hat*self->xi3_hat+rho_4*self->xi4_hat*self->xi4_hat)
       );
+  }
+
+  // self->xi3_hat = self->xi3_hat + dt*0.5f*rho_3*vmag(e_w);
+  if (self->xi3_hat > saturate_xi3_hat){
+    self->xi3_hat = saturate_xi3_hat;
+  }
+  // self->xi4_hat = self->xi4_hat + dt*0.5f*rho_4*vmag2(e_w);
+  if (self->xi4_hat > saturate_xi4_hat){
+    self->xi4_hat = saturate_xi4_hat;
   }
 
   struct quat dnominal_atitudedt = qqmul2(
@@ -452,6 +452,7 @@ bool controllerOutOfTreeTest(void) {
 
 
 PARAM_GROUP_START(ctrlAtt)
+PARAM_ADD(PARAM_FLOAT, xi_r, &xi_r)
 PARAM_ADD(PARAM_FLOAT, saturate_xi3_hat, &saturate_xi3_hat)
 PARAM_ADD(PARAM_FLOAT, saturate_xi4_hat, &saturate_xi4_hat)
 PARAM_ADD(PARAM_FLOAT, robust_controller, &robust_controller)

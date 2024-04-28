@@ -37,7 +37,7 @@ K_HAT = PureQuaternion([0,0,1])
 
 
 class Experiment():
-    def __init__(self, crazyflie_id: int, channel : int = 100, dt : float = 0.01, Tmax : int = 300, p0 : list = [0.0,0.0,0.0], v0: list = [0.0,0.0,0.0]):
+    def __init__(self, crazyflie_id: int, channel : int = 100, dt : float = 0.01, Tmax : int = 180, p0 : list = [0.0,0.0,0.0], v0: list = [0.0,0.0,0.0]):
         # Initialize the low-level drivers
         cflib.crtp.init_drivers()
         # URI to the Crazyflie to connect to
@@ -102,9 +102,9 @@ class Experiment():
         # time.sleep(1)
         self.scf.cf.param.set_value('ctrlAtt.robust_controller', 1.0)
         self.scf.cf.param.set_value('ctrlAtt.att_thrust', 4.0)
-        self.scf.cf.param.set_value('ctrlAtt.saturate_xi3_hat', 0.001)
-        self.scf.cf.param.set_value('ctrlAtt.saturate_xi4_hat', 0.001)
-        # self.scf.cf.param.set_value('ctrlAtt.xi_r', 0.0005)
+        self.scf.cf.param.set_value('ctrlAtt.saturate_xi3_hat', 0.0001)
+        self.scf.cf.param.set_value('ctrlAtt.saturate_xi4_hat', 0.0001)
+        self.scf.cf.param.set_value('ctrlAtt.xi_r', 0.0005)
         self.scf.cf.param.set_value('ctrlAtt.k_varphi_e', 2.5)
         self.scf.cf.param.set_value('ctrlAtt.epsilon_o', 2e-3)
         self.scf.cf.param.set_value('ctrlAtt.k_e_w', 0.001)
@@ -170,12 +170,11 @@ class Experiment():
         o_d = o_z
         k_B = o*K_HAT*o.conj(); k_B = PureQuaternion(k_B.imag)
         u_T = k_B.dot(f)
-        # angle = t/2 #% (2*pi) - pi
-        # o_d = Quaternion([cos(angle/2), sin(angle/2), 0, 0])
         o_d = Quaternion([1.0, 0.0, 0.0, 0.0])
+        angle = t/5 #% (2*pi) - pi
+        # o_d = Quaternion([cos(angle/2), sin(angle/2), 0, 0])*Quaternion([cos(angle/2), 0, sin(angle/2), 0])
         # u_T = 0
-        # o_d = Quaternion([cos(t/10), 0.0, 0.0, sin(t/10)])*Quaternion([cos(pi/8), sin(pi/8)*cos(t/10), sin(pi/8)*sin(t/10), 0.0])
-        # o_d = Quaternion([cos(pi/12), sin(pi/12)*cos(t/10), sin(pi/12)*sin(t/10), 0.0])
+        o_d = Quaternion([cos(pi/8), sin(pi/8)*cos(t/8), sin(pi/8)*sin(t/8), 0.0])
         return o_d,u_T
     
     def _in_the_loop_integrate(self, o: Quaternion, u_T: float, t: float, dt: float):
